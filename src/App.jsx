@@ -1,34 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import useRem from './useRem'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [size, px2rem] = useRem()
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#01061b',
+        overflow: 'hidden',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {!!size && (
+        <div
+          style={{
+            margin: 'auto',
+            // width: 1920,
+            // height: 1080,
+            backgroundColor: '#fff',
+            width: size.width,
+            height: size.height,
+          }}
+        >
+          <div style={{ width: px2rem(1080 / 2), height: px2rem(1080 / 2), backgroundColor: 'antiquewhite' }}>
+            大屏 {size.width} x {size.height} rem: {size.rootFontSize}
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
