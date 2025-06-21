@@ -1,4 +1,4 @@
-import useRem from './useRem'
+import useRem, { px2rem } from './useRem'
 
 function App() {
   const [size, sizeFn] = useRem()
@@ -28,6 +28,9 @@ function App() {
         >
           <div style={{ width: sizeFn.calcWidth(50), height: sizeFn.calcHeight(50), backgroundColor: 'antiquewhite' }}>
             大屏 {size.width} x {size.height} rem: {size.rootFontSize}
+          </div>
+          <div style={{ width: sizeFn.px2rem(1920 / 2), height: px2rem(1080 / 2), backgroundColor: 'aquamarine' }}>
+            宽高各为1/2
           </div>
         </div>
       )}
