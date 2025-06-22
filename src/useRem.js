@@ -48,7 +48,7 @@ const computeSize = size => {
  * @typedef {{ width: number; height: number; rootFontSize: number} } Size
  * 仅使用一次, 避免冲突
  *
- * @returns {[Size, {px2rem: (px: number) => string, calcWidth: (percent: number) => number, calcHeight: (percent: number) => number}]}
+ * @returns {[Size, {px2rem: (px: number) => string, calcWidth: (percent: number) => number, calcHeight: (percent: number) => number, calcPx: (px: number) => number}]}
  * @description 使用 rem 布局, 计算根元素的 font-size, 以及根据百分比计算宽高
  */
 function useRem() {
@@ -85,8 +85,17 @@ function useRem() {
     },
     [size.height]
   )
+  const calcPx = useCallback(
+    px => {
+      if (typeof px !== 'number') {
+        return px
+      }
+      return (px * size.rootFontSize) / RPX
+    },
+    [size.rootFontSize]
+  )
 
-  return [size, { px2rem, calcWidth, calcHeight }]
+  return [size, { px2rem, calcWidth, calcHeight, calcPx }]
 }
 
 export default useRem

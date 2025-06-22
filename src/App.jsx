@@ -2,7 +2,7 @@ import useRem, { px2rem } from './useRem'
 import GeoDemo from './GeoDemo'
 
 function App() {
-  const [size] = useRem()
+  const [size, sizeFn] = useRem()
 
   return (
     <div
@@ -22,15 +22,31 @@ function App() {
             margin: 'auto',
             // width: 1920,
             // height: 1080,
-            backgroundColor: '#fff',
+            backgroundColor: '#100c2a',
             width: size.width,
             height: size.height,
           }}
         >
-          {/* <div style={{ width: sizeFn.calcWidth(50), height: sizeFn.calcHeight(50), backgroundColor: 'antiquewhite' }}>
+          {/* 大屏
+          <div
+            style={{
+              fontSize: sizeFn.calcPx(16),
+              width: sizeFn.calcWidth(50),
+              height: sizeFn.calcHeight(50),
+              backgroundColor: 'antiquewhite',
+            }}
+          >
             大屏 {size.width} x {size.height} rem: {size.rootFontSize}
           </div> */}
-          <div style={{ width: px2rem(1920 / 2), height: px2rem(1080 / 2), top: '25%', left: '25%' }}>
+          <div
+            style={{
+              width: sizeFn.calcWidth(60),
+              height: sizeFn.calcHeight(80),
+              position: 'absolute',
+              left: sizeFn.calcWidth(20),
+              top: sizeFn.calcHeight(10),
+            }}
+          >
             <GeoDemo />
           </div>
         </div>

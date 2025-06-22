@@ -1,11 +1,95 @@
 import { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
-// import useRem, { px2rem } from './useRem'
+import useRem from './useRem'
+import domResize from './domResize'
+import hkGeo from '../geo/HK.json'
+
+const defaultOption = {
+  title: {
+    text: '香港18区人口密度 （2011）',
+    textStyle: {
+      fontSize: 16,
+    },
+    subtext: 'Data from Wikipedia',
+    subtextStyle: {
+      fontSize: 12,
+    },
+    sublink: 'http://zh.wikipedia.org/wiki/%E9%A6%99%E6%B8%AF%E8%A1%8C%E6%94%BF%E5%8D%80%E5%8A%83#cite_note-12',
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}<br/>{c} (人 / 平方公里)',
+  },
+  visualMap: {
+    min: 800,
+    max: 50000,
+    text: ['高', '低'],
+    realtime: false,
+    calculable: true,
+    inRange: {
+      color: ['lightskyblue', 'yellow', 'orangered'],
+    },
+  },
+  series: [
+    {
+      name: '香港18区人口密度',
+      type: 'map',
+      map: 'HK',
+      label: {
+        show: true,
+      },
+      data: [
+        { name: '中西区', value: 20057.34 },
+        { name: '湾仔', value: 15477.48 },
+        { name: '东区', value: 31686.1 },
+        { name: '南区', value: 6992.6 },
+        { name: '油尖旺', value: 44045.49 },
+        { name: '深水埗', value: 40689.64 },
+        { name: '九龙城', value: 37659.78 },
+        { name: '黄大仙', value: 45180.97 },
+        { name: '观塘', value: 55204.26 },
+        { name: '葵青', value: 21900.9 },
+        { name: '荃湾', value: 4918.26 },
+        { name: '屯门', value: 5881.84 },
+        { name: '元朗', value: 4178.01 },
+        { name: '北区', value: 2227.92 },
+        { name: '大埔', value: 2180.98 },
+        { name: '沙田', value: 9172.94 },
+        { name: '西贡', value: 3368 },
+        { name: '离岛', value: 806.98 },
+      ],
+      // 自定义名称映射，geo 数据名映射为中文名称
+      nameMap: {
+        'Central and Western': '中西区',
+        Eastern: '东区',
+        Islands: '离岛',
+        'Kowloon City': '九龙城',
+        'Kwai Tsing': '葵青',
+        'Kwun Tong': '观塘',
+        North: '北区',
+        'Sai Kung': '西贡',
+        'Sha Tin': '沙田',
+        'Sham Shui Po': '深水埗',
+        Southern: '南区',
+        'Tai Po': '大埔',
+        'Tsuen Wan': '荃湾',
+        'Tuen Mun': '屯门',
+        'Wan Chai': '湾仔',
+        'Wong Tai Sin': '黄大仙',
+        'Yau Tsim Mong': '油尖旺',
+        'Yuen Long': '元朗',
+      },
+    },
+  ],
+}
 
 export default function GeoDemo() {
   const dom = useRef()
+  /**
+   * @type {React.RefObject<import('echarts').ECharts>}
+   */
   const instance = useRef()
-  // const [size, sizeFn] = useRem()
+  const [_size, sizeFn] = useRem()
 
   useEffect(() => {
     const myChart = echarts.init(dom.current, 'dark', {
@@ -13,110 +97,58 @@ export default function GeoDemo() {
       useDirtyRect: true,
     })
     myChart.showLoading()
+    echarts.registerMap('HK', hkGeo)
+    myChart.setOption(defaultOption)
 
+    const onResize = () => {
+      myChart.resize()
+    }
+    domResize.on(dom.current, onResize)
     instance.current = myChart
-    window.addEventListener('resize', myChart.resize)
 
     return () => {
+      domResize.off(dom, onResize)
       myChart.dispose()
-      window.removeEventListener('resize', myChart.resize)
     }
   }, [])
 
   useEffect(() => {
-    const init = async () => {
-      const geoJson = await import('../geo/HK.json')
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      echarts.registerMap('HK', geoJson)
-      if (instance.current) {
-        instance.current.setOption({
-          title: {
-            text: '香港18区人口密度 （2011）',
-            subtext: 'Data from Wikipedia',
-            sublink: 'http://zh.wikipedia.org/wiki/%E9%A6%99%E6%B8%AF%E8%A1%8C%E6%94%BF%E5%8D%80%E5%8A%83#cite_note-12',
+    const px2px = sizeFn.calcPx
+    if (instance.current) {
+      instance.current.setOption({
+        title: {
+          textStyle: {
+            fontSize: px2px(16),
           },
-          tooltip: {
-            trigger: 'item',
-            formatter: '{b}<br/>{c} (人 / 平方公里)',
+          subtextStyle: {
+            fontSize: px2px(12),
           },
-          toolbox: {
-            show: true,
-            orient: 'vertical',
-            left: 'right',
-            top: 'center',
-            feature: {
-              dataView: { readOnly: false },
-              restore: {},
-              saveAsImage: {},
-            },
+        },
+        tooltip: {
+          textStyle: {
+            fontSize: px2px(14),
           },
-          visualMap: {
-            min: 800,
-            max: 50000,
-            text: ['高', '低'],
-            realtime: false,
-            calculable: true,
-            inRange: {
-              color: ['lightskyblue', 'yellow', 'orangered'],
-            },
+        },
+        visualMap: {
+          itemWidth: px2px(20),
+          itemHeight: px2px(140),
+          textGap: px2px(10),
+          padding: px2px(5),
+          textStyle: {
+            fontSize: px2px(12),
           },
-          series: [
-            {
-              name: '香港18区人口密度',
-              type: 'map',
-              map: 'HK',
-              label: {
-                show: true,
-              },
-              data: [
-                { name: '中西区', value: 20057.34 },
-                { name: '湾仔', value: 15477.48 },
-                { name: '东区', value: 31686.1 },
-                { name: '南区', value: 6992.6 },
-                { name: '油尖旺', value: 44045.49 },
-                { name: '深水埗', value: 40689.64 },
-                { name: '九龙城', value: 37659.78 },
-                { name: '黄大仙', value: 45180.97 },
-                { name: '观塘', value: 55204.26 },
-                { name: '葵青', value: 21900.9 },
-                { name: '荃湾', value: 4918.26 },
-                { name: '屯门', value: 5881.84 },
-                { name: '元朗', value: 4178.01 },
-                { name: '北区', value: 2227.92 },
-                { name: '大埔', value: 2180.98 },
-                { name: '沙田', value: 9172.94 },
-                { name: '西贡', value: 3368 },
-                { name: '离岛', value: 806.98 },
-              ],
-              // 自定义名称映射，geo 数据名映射为中文名称
-              nameMap: {
-                'Central and Western': '中西区',
-                Eastern: '东区',
-                Islands: '离岛',
-                'Kowloon City': '九龙城',
-                'Kwai Tsing': '葵青',
-                'Kwun Tong': '观塘',
-                North: '北区',
-                'Sai Kung': '西贡',
-                'Sha Tin': '沙田',
-                'Sham Shui Po': '深水埗',
-                Southern: '南区',
-                'Tai Po': '大埔',
-                'Tsuen Wan': '荃湾',
-                'Tuen Mun': '屯门',
-                'Wan Chai': '湾仔',
-                'Wong Tai Sin': '黄大仙',
-                'Yau Tsim Mong': '油尖旺',
-                'Yuen Long': '元朗',
-              },
-            },
-          ],
-        })
-        instance.current.hideLoading()
-      }
+          handleStyle: {
+            borderWidth: px2px(1),
+          },
+          indicatorStyle: {
+            borderWidth: px2px(2),
+          },
+        },
+        series: [{ label: { fontSize: px2px(12) } }],
+      })
+      instance.current.hideLoading()
     }
-    init()
-  }, [])
+  }, [sizeFn.calcPx])
 
   return <div style={{ width: '100%', height: '100%' }} ref={dom}></div>
 }
