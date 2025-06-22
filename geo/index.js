@@ -22,6 +22,10 @@ async function main() {
   echarts.registerMap('HK', geoJson)
   myChart.hideLoading()
 
+  window.addEventListener('resize', () => {
+    myChart.resize()
+  })
+
   myChart.setOption({
     title: {
       text: '香港18区人口密度 （2011）',
