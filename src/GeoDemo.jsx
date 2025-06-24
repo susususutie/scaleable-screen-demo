@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
 import useRem from './useRem'
-import domResize from './domResize'
+import domResize from '@/util/domResize'
 import hkGeo from '../geo/HK.json'
 
 const defaultOption = {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
-import domResize from './domResize'
+import domResize from '@/util/domResize'
 import * as echarts from 'echarts'
 
 export default function EchartsGraph(props) {

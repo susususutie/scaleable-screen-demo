@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // 设置基准路径
+    "paths": {
+      "@/*": ["src/*"] // 配置路径别名
+    }
+  },
+  "include": ["src"] // 包含的文件夹
+}
