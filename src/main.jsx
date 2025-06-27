@@ -6,7 +6,7 @@ import { ScalableRoot } from './ScalableRoot'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ScalableRoot>
+    <ScalableRoot backgroundColor='#eee'>
       <ThemeSwitch />
     </ScalableRoot>
   </StrictMode>

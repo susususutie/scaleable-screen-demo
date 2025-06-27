@@ -5,7 +5,16 @@ import { useEffect } from 'react'
 import debounce from 'lodash.debounce'
 
 export default function ScalableRoot(props) {
-  const { rootValue = 16, precision = 5, rootWidth = 1920, rootHeight = 1080, wait = 300, children } = props
+  const {
+    rootValue = 16,
+    precision = 5,
+    rootWidth = 1920,
+    rootHeight = 1080,
+    wait = 300,
+    backgroundColor,
+    backgroundImage,
+    children,
+  } = props
 
   const [rootSize, setRootSize] = useState(null)
   useEffect(() => {
@@ -129,12 +138,28 @@ export default function ScalableRoot(props) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#eee',
+          backgroundColor: backgroundColor,
+          position: 'relative',
         }}
       >
-        <div
-          style={{ width: rootSize?.width, height: rootSize?.height, position: 'relative', backgroundColor: '#fff' }}
-        >
+        {backgroundImage ? (
+          <div
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: 0,
+              backgroundImage: backgroundImage,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              filter: 'blur(10px)',
+              zIndex: -1,
+            }}
+          ></div>
+        ) : null}
+        <div style={{ width: rootSize?.width, height: rootSize?.height, position: 'relative' }}>
           {rootSize ? children : null}
         </div>
       </div>

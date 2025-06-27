@@ -8,7 +8,7 @@ export default function ThemeSwitch() {
   const size = useContext(SizeContext)
   // console.log(size?.rootValue)
 
-  const groupStyle= { display: 'flex', flexWrap: 'wrap', gap: size.calcRem(24) }
+  const groupStyle = { display: 'flex', flexWrap: 'wrap', gap: size.calcRem(24), background: 'white' }
   const itemStyle = { width: size.calcRem(624), height: size.calcRem(344) }
   return (
     <div style={groupStyle}>
