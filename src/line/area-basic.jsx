@@ -1,4 +1,4 @@
-import ScalableGraph from '@/ScalableGraph'
+import EchartsGraph from '@/ReactEcharts'
 
 const option = {
   xAxis: {
@@ -19,5 +19,5 @@ const option = {
 }
 
 export default function Demo() {
-  return <ScalableGraph option={option} />
+  return <EchartsGraph option={option} />
 }

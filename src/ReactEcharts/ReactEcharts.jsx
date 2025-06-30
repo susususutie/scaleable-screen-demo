@@ -1,12 +1,13 @@
 import * as echarts from 'echarts'
 import { useEffect, useRef } from 'react'
-import domResize from '@/util/domResize'
+import domResize from './domResize'
 import { useMemo } from 'react'
-import wonderland from './echarts-theme/wonderland.json'
+import wonderland from './themes/wonderland.json'
+import simpleHashWithBitwise from './simpleHashWithBitwise'
 
 echarts.registerTheme('wonderland', wonderland)
 
-export default function ScalableGraph(props) {
+export default function ReactEcharts(props) {
   const { option } = props
 
   const dom = useRef()
@@ -47,13 +48,4 @@ export default function ScalableGraph(props) {
   }, [optionDepKey])
 
   return <div style={{ width: '100%', height: '100%' }} ref={dom}></div>
-}
-
-function simpleHashWithBitwise(str) {
-  let hash = 0
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i)
-    hash |= 0 // 转换为 32 位整数
-  }
-  return hash
 }
