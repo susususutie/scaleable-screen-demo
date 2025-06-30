@@ -18,8 +18,8 @@ importers:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
       react-responsive-scale:
-        specifier: ^1.0.2
-        version: 1.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^1.0.3
+        version: 1.0.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
     devDependencies:
       '@eslint/js':
         specifier: ^9.25.0
@@ -752,8 +752,8 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
-  react-responsive-scale@1.0.2:
-    resolution: {integrity: sha512-mJJLn2ZgAo8o67fKtw/YZBe9ijBJT0gHn/aS0xASPh/6pBVl2jfV/30h+w3n2HpUM+4QYouo+NETage6RhGYsg==}
+  react-responsive-scale@1.0.3:
+    resolution: {integrity: sha512-79yT9WNhJpIChOOQkW6PrzxoZAW2oJCaaVas0dyYNPc1CyizW+JIzDeAX3gz0Rl0hCsj6oZosD6+/aTTH8wc0w==}
     peerDependencies:
       react: '>=18.1.0'
       react-dom: '>=18.1.0'
@@ -1434,7 +1434,7 @@ snapshots:
       react: 19.1.0
       scheduler: 0.26.0
 
-  react-responsive-scale@1.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react-responsive-scale@1.0.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       lodash-es: 4.17.21
       react: 19.1.0

@@ -2,10 +2,10 @@ import LineSimple from './line/simple'
 import LineStack from './line/stack'
 import LineAreaBasic from './line/area-basic'
 import { useContext } from 'react'
-import { ResponsiveScaleContext } from 'react-responsive-scale'
+import { ScaleContext } from 'react-responsive-scale'
 
 export default function App() {
-  const { calcRem } = useContext(ResponsiveScaleContext)
+  const { calcRem } = useContext(ScaleContext)
 
   const groupStyle = { display: 'flex', flexWrap: 'wrap', gap: calcRem(24), background: 'white' }
   const itemStyle = { width: calcRem(624), height: calcRem(344) }
