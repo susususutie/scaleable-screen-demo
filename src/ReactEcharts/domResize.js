@@ -59,7 +59,7 @@ export default {
    * @returns {void}
    */
   clean: (dom) => {
-    if (!(dom instanceof HTMLElement) || typeof fn !== "function" || !callbackMap.has(dom)) return;
+    if (!(dom instanceof HTMLElement) || !callbackMap.has(dom)) return;
     callbackMap.delete(dom);
     resizeObserver.unobserve(dom);
   },
