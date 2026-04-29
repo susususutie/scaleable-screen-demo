@@ -1,51 +1,66 @@
-import * as echarts from 'echarts'
-import { useEffect, useRef } from 'react'
-import domResize from './domResize'
-import { useMemo } from 'react'
-import wonderland from './themes/wonderland.json'
-import simpleHashWithBitwise from './simpleHashWithBitwise'
+import * as echarts from "echarts";
+import { useEffect, useRef } from "react";
+import domResize from "./domResize";
+import wonderland from "./themes/wonderland.json";
+import fastDeepEqual from "./fastDeepEqual";
+import { memo } from "react";
 
-echarts.registerTheme('wonderland', wonderland)
+echarts.registerTheme("wonderland", wonderland);
 
-export default function ReactEcharts(props) {
-  const { option } = props
+function ReactEcharts(props) {
+  const { theme, option } = props;
+  const preOptionRef = useRef();
 
-  const dom = useRef()
-  /**
-   * @type {React.RefObject<import('echarts').ECharts>}
-   */
-  const instance = useRef()
+  const dom = useRef();
 
   useEffect(() => {
-    const myChart = echarts.init(dom.current, 'wonderland', {
-      renderer: 'svg',
-      // useDirtyRect: true,
-    })
-    instance.current = myChart
+    console.log("mount");
+    if (!dom.current) return;
+    const el = dom.current;
 
-    domResize.on(dom.current, () => {
-      myChart.resize()
-    })
+    /** @type {import('echarts').ECharts} */
+    const chart = echarts.init(el, theme, {
+      renderer: "svg",
+      // useDirtyRect: true,
+    });
+    const onResize = () => {
+      chart.resize();
+    };
+    domResize.on(el, onResize);
+    el._chart = chart;
 
     return () => {
-      // domResize.off(dom, onResize)
-      domResize.clean(dom)
-      myChart.dispose()
-    }
-  }, [])
+      preOptionRef.current = undefined;
+      domResize.off(el, onResize);
+      el._chart?.dispose();
+      el._chart = null;
+    };
+  }, [theme]);
 
-  const optionDepKey = useMemo(() => {
-    const str = JSON.stringify(option)
-    const hash = simpleHashWithBitwise(str)
-    console.log(hash)
-    return hash
-  }, [option])
   useEffect(() => {
-    if (instance.current && option) {
-      instance.current.setOption(option)
+    console.log("theme change", theme);
+    if (dom.current && dom.current._chart && preOptionRef.current) {
+      dom.current._chart.setOption(preOptionRef.current);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [optionDepKey])
+  }, [theme]);
 
-  return <div style={{ width: '100%', height: '100%' }} ref={dom}></div>
+  useEffect(() => {
+    if (!fastDeepEqual(option, preOptionRef.current)) {
+      if (dom.current && dom.current._chart && option) {
+        dom.current._chart.setOption(option);
+      }
+      preOptionRef.current = option;
+    }
+  }, [option]);
+
+  console.log("render", new Date().getSeconds());
+  return <div style={{ width: "100%", height: "100%" }} ref={dom}></div>;
 }
+
+const propsAreEqual = (prevProps, nextProps) => {
+  return fastDeepEqual(prevProps, nextProps);
+};
+
+const MemoReactEcharts = memo(ReactEcharts, propsAreEqual);
+
+export default MemoReactEcharts;
